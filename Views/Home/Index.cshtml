@@ -1,0 +1,42 @@
+﻿@{
+    @model List<Repositorio>
+    ViewData["Title"] = "PesquisaRepo";
+}
+
+<h2>Pesquisar repositórios por nome</h2>
+
+<form asp-controller="Home" asp-action="Index" method="get">
+    <label>Nome do repositório</label>
+    <input type="text" name="termoPesquisa" value="" />
+    <input type="submit" value="Pesquisar" />
+</form>
+
+<br />
+
+@{
+    if (Model != null)
+    {
+        <h4>Resultados para @ViewData["pesquisa"]</h4>
+
+        var resultPesquisa = Model.Take(70);
+        <ol>
+            @foreach (Repositorio repo in resultPesquisa)
+            {                
+            <li>                
+                <form asp-controller="Home" asp-action="Repositorio" method="post">
+                    <input type="hidden" name="name" value="@repo.Name" />
+                    <input type="hidden" name="descricao" value="@repo.Description" />
+                    <input type="hidden" name="dono" value="@repo.Owner" />
+                    <input type="hidden" name="linguagem" value="@repo.Language" />
+                    <input type="hidden" name="data" value="@repo.Updated_at" />
+                    
+                    <p>@repo.Contributors[0]</p>
+                    <p></p>
+                    <button type="submit">Info</button>
+                </form>
+
+            </li>
+            }
+        </ol>
+    }
+}

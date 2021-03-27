@@ -1,0 +1,19 @@
+﻿@{
+    @model List<Repositorio>
+}
+
+
+
+<ul>
+    @{
+        foreach (Repositorio repo in Model)
+        {
+            @using (Html.BeginForm())
+            {
+               
+                <input class="btn btn-outline-light" type="button" value="Generate report" />
+            }
+            <li><a asp-controller="GithubAPI" asp-action="ExibeDetalhes" asp-route-id="">@repo.Name</a></li>
+        }
+    }
+</ul>
