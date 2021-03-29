@@ -14,34 +14,116 @@ namespace Avonale_ApiGit.Controllers
     {
         private readonly ApiGit api = new ApiGit();
 
-
-
-        public IActionResult Index(string termoPesquisa = null)
+        public IActionResult Index(string nomeRepositorio = null)
         {
-            
-            ViewData["pesquisa"] = !String.IsNullOrEmpty(termoPesquisa) ? termoPesquisa : "";
-
-            if (!string.IsNullOrEmpty(termoPesquisa))
+            if (!string.IsNullOrEmpty(nomeRepositorio))
             {
-                return View(api.Pesquisar(termoPesquisa));
+                try
+                {
+                    List<Repositorio> reps = api.Pesquisar(nomeRepositorio);
+                    if (reps[0].Equals(null))
+                    {
+                        ViewBag.pesquisaError = true;
+                        return View();
+                    }
+                    return View(reps);
+                }
+                catch
+                {
+                    ViewBag.Error = true;
+                    return View();
+                }
+
             }
-            return View();
+            else
+            {
+                return View();
+            }
+
         }
 
 
         public IActionResult MeusRepositorios()
         {
-            return View(api.GetMeusRepositorios());
+            try
+            {
+                return View(api.GetMeusRepositorios());
+            }
+            catch
+            {
+                ViewBag.Error = true;
+                return RedirectToAction("Index", "Home", new { }); ;
+            }
+
         }
 
-        public IActionResult Repositorio()
+        public IActionResult Repositorio(string id)
         {
-            return View();
+            try
+            {
+                if (!string.IsNullOrEmpty(id))
+                {
+                    return View(api.GetRepositorioID(id));
+                }
+                else
+                {
+                    return View();
+                }
+            }
+            catch
+            {
+                ViewBag.Error = true;
+                return RedirectToAction("Index", "Home", new { }); ;
+            }
+
+
         }
-        public IActionResult Privacy()
+
+
+        public IActionResult Favoritos()
         {
-            return View();
+            TxtData.Init();
+
+            string[] ids = TxtData.LerData();
+            List<Repositorio> reps = new List<Repositorio>();
+            try
+            {
+                foreach (string id_string in ids)
+                {
+                    if (id_string != "" | id_string == null)
+                    {
+                        reps.Add(api.GetRepositorioID(id_string));
+                    }
+                }
+                ViewBag.reps = reps;
+                return View(reps);
+            }
+            catch
+            {
+                ViewBag.Error = true;
+            }
+            return View(reps);
+
+
+
         }
+
+
+        public IActionResult Adicionar(string id)
+        {
+            //Salva no data.txt
+            TxtData.Adicionar(id);
+
+            return RedirectToAction("Favoritos", "Home", new { });
+        }
+        public IActionResult Remover(string id)
+        {
+            //Deleta do data.txt
+            bool resultado = TxtData.Remover(id);
+
+            return RedirectToAction("Favoritos", "Home", new { });
+        }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

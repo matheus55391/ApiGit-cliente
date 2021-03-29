@@ -1,19 +1,45 @@
-﻿@{
-    @model List<Repositorio>
-}
+﻿@model List<Repositorio>
 
 
+<div class="card">
+    <div class="card-header text-center bg-dark text-white">
+        <div class="d-flex align-items-center">
+            <h3 class="mx-auto w-100">Repositorios de <a>Matheus55391</a></h3>
+            <i class="fa fa-question-circle ml-auto"></i>
+        </div>
+    </div>
+    <div class="card-body">
 
-<ul>
-    @{
-        foreach (Repositorio repo in Model)
-        {
-            @using (Html.BeginForm())
-            {
-               
-                <input class="btn btn-outline-light" type="button" value="Generate report" />
-            }
-            <li><a asp-controller="GithubAPI" asp-action="ExibeDetalhes" asp-route-id="">@repo.Name</a></li>
-        }
-    }
-</ul>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Nome do Repositório</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+
+                    if (Model != null)
+                    {
+                        @foreach (Repositorio repo in Model)
+                        {
+                            <tr>
+                                <th scope="row">@repo.Id</th>
+                                <td>@repo.Name</td>
+                                <td>
+                                    <form asp-controller="Home" asp-action="Repositorio" method="post">
+                                        <input type="hidden" name="id" value="@repo.Id" />
+                                        <button class="btn btn-dark my-2 my-sm-0" type="submit" title="Mais informações">Detalhes</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    }
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>

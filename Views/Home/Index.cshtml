@@ -1,42 +1,46 @@
-﻿@{
-    @model List<Repositorio>
-    ViewData["Title"] = "PesquisaRepo";
-}
+﻿@model List<Repositorio>
 
-<h2>Pesquisar repositórios por nome</h2>
+<div class="card">
+    <div class="card-header text-center bg-dark text-white">
+        <div class="d-flex align-items-center">
+            <h3 class="mx-auto w-100">Repositórios do GitHub</h3>
+            <i class="fa fa-question-circle ml-auto"></i>
+        </div>
+    </div>
+    <div class="card-body">
+        <table id="tabel_id" class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Nome do Repositório</th>
+                    <th scope="col">Dono</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
 
-<form asp-controller="Home" asp-action="Index" method="get">
-    <label>Nome do repositório</label>
-    <input type="text" name="termoPesquisa" value="" />
-    <input type="submit" value="Pesquisar" />
-</form>
+                    if (Model != null)
+                    {
 
-<br />
+                        @foreach (Repositorio repo in Model)
+                        {
+                            <tr>
+                                <td>@repo.Name</td>
+                                <td>@repo.Owner.login</td>
+                                <td>
+                                    <form asp-controller="Home" asp-action="Repositorio" method="post">
+                                        <input type="hidden" name="id" value="@repo.Id" />
+                                        <button class="btn btn-dark my-2 my-sm-0" type="submit" title="Mais informações">Detalhes</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    }
 
-@{
-    if (Model != null)
-    {
-        <h4>Resultados para @ViewData["pesquisa"]</h4>
+                }
 
-        var resultPesquisa = Model.Take(70);
-        <ol>
-            @foreach (Repositorio repo in resultPesquisa)
-            {                
-            <li>                
-                <form asp-controller="Home" asp-action="Repositorio" method="post">
-                    <input type="hidden" name="name" value="@repo.Name" />
-                    <input type="hidden" name="descricao" value="@repo.Description" />
-                    <input type="hidden" name="dono" value="@repo.Owner" />
-                    <input type="hidden" name="linguagem" value="@repo.Language" />
-                    <input type="hidden" name="data" value="@repo.Updated_at" />
-                    
-                    <p>@repo.Contributors[0]</p>
-                    <p></p>
-                    <button type="submit">Info</button>
-                </form>
+            </tbody>
+        </table>
 
-            </li>
-            }
-        </ol>
-    }
-}
+    </div>
+</div>

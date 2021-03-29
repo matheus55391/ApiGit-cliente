@@ -1,1 +1,67 @@
-﻿
+﻿@model Repositorio
+
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <h2 class="mb-0">Informações do Repositorio</h2>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h4 class="mb-0">Nome</h4>
+            </div>
+            <div class="col-sm-9 text-secondary"> @Model.Name</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Descrição</h6>
+            </div>
+            <div class="col-sm-9 text-secondary"> @Model.Description</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Ultima atualização</h6>
+            </div>
+            <div class="col-sm-9 text-secondary"> @Model.Updated_at</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Linguagem</h6>
+            </div>
+            <div class="col-sm-9 text-secondary"> @Model.Language</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Contribuidores</h6>
+            </div>
+            <div class="col-sm-9 text-secondary">
+                @{
+                    foreach (string nome_contribuidor in Model.Contributors)
+                    {
+
+                        <p>@nome_contribuidor</p>
+
+                    }
+
+                }
+            </div>
+
+
+        </div>
+    </div>
+
+</div>
+@{
+    @using (Html.BeginForm("Adicionar", "Home", new { Id = Model.Id }, FormMethod.Get))
+    {
+        <button class="btn btn-dark my-2 my-sm-0">Favoritar</button>
+    }
+}
+
+

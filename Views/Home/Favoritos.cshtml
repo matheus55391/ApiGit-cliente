@@ -1,0 +1,40 @@
+﻿@model List<Repositorio>
+
+<div class="card">
+    <div class="card-header text-center bg-dark text-white">
+        <div class="d-flex align-items-center">
+            <h3 class="mx-auto w-100">Favoritos</h3>
+            <i class="fa fa-question-circle ml-auto"></i>
+        </div>
+    </div>
+    <div class="card-body">
+        @foreach (Repositorio repo in Model)
+        {
+
+            <div class="row">
+
+                <div class="col-6"><h3>@repo.Name</h3></div>
+                <div class="col-3">
+                    <form asp-controller="Home" asp-action="Repositorio" method="post">
+                        <input type="hidden" name="id" value="@repo.Id" />
+                        <button class="btn btn-dark my-2 my-sm-0" type="submit" title="Mais informações">Detalhes</button>
+                    </form>
+                </div>
+                <div class="col-3">
+                    @using (Html.BeginForm("Remover", "Home", new { Id = repo.Id }, FormMethod.Get))
+                    {
+                        <button class="btn btn-dark my-2 my-sm-0">Remover</button>
+                    }
+
+                </div>
+            </div>
+            <hr />
+        }
+    </div>
+</div>
+
+
+
+
+
+
