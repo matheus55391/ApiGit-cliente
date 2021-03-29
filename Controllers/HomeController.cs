@@ -14,23 +14,22 @@ namespace Avonale_ApiGit.Controllers
     {
         private readonly ApiGit api = new ApiGit();
 
-        public IActionResult Index(string nomeRepositorio = null)
+        public IActionResult Index(string nomeRepositorio = null, bool limite = false)
         {
+            ViewBag.limite = limite;
             if (!string.IsNullOrEmpty(nomeRepositorio))
             {
                 try
                 {
                     List<Repositorio> reps = api.Pesquisar(nomeRepositorio);
                     if (reps[0].Equals(null))
-                    {
-                        ViewBag.pesquisaError = true;
+                    { 
                         return View();
                     }
                     return View(reps);
                 }
                 catch
                 {
-                    ViewBag.Error = true;
                     return View();
                 }
 
@@ -52,7 +51,7 @@ namespace Avonale_ApiGit.Controllers
             catch
             {
                 ViewBag.Error = true;
-                return RedirectToAction("Index", "Home", new { }); ;
+                return RedirectToAction("Index", "Home", new { limite = true }); ;
             }
 
         }
@@ -73,7 +72,7 @@ namespace Avonale_ApiGit.Controllers
             catch
             {
                 ViewBag.Error = true;
-                return RedirectToAction("Index", "Home", new { }); ;
+                return RedirectToAction("Index", "Home", new { limite = true});
             }
 
 
@@ -100,7 +99,8 @@ namespace Avonale_ApiGit.Controllers
             }
             catch
             {
-                ViewBag.Error = true;
+
+                return RedirectToAction("Index", "Home", new { limite = true });
             }
             return View(reps);
 

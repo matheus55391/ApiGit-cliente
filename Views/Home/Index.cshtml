@@ -1,5 +1,13 @@
 ﻿@model List<Repositorio>
 
+@{ 
+    if(ViewBag.limite)
+            {
+                <script>alert("Erro: Limite da api excedido, tente novamente mais tarde.")</script>
+            }
+}
+
+
 <div class="card">
     <div class="card-header text-center bg-dark text-white">
         <div class="d-flex align-items-center">
